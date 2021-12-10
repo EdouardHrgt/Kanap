@@ -1,34 +1,46 @@
-//classe produits
-class PRODUCT {
-    constructor(colors, _id, name, price, imageUrl, description, altTxt) {
-        this.colors = colors;
-        this._id = _id;
-        this.name = name;
-        this.price = price;
-        this.imageUrl = imageUrl;
-        this.description = description;
-        this.altTxt = altTxt;
-    }
+
+    /*
+    dataList.colors.forEach(color =>{
+        let newOption = document.createElement("option");
+        newOption.innerHTML = `${color}`;
+        newOption.value = `${color}`;
+        let parentNode = document.querySelector("option");
+        parentNode.appendChild(newOption);
+    })
+    */
+    
+    /*
+    let parentNode = document.querySelector('option');
+    let productColors = dataList.colors;
+    productColors.forEach(function(color, i){
+        let optionNode = `<option value="${productColors[i]}">${productColors[i]}</option>`;
+        console.log(optionNode);
+        parentNode.appendChild(optionNode);
+    })
+    */
+
+
+    
+// Récupération des options choisies (coleur + prix)
+let quantity = document.querySelector('#quantity').value;
+console.log(quantity);
+let colorChoice = document.querySelector('#colors').value;
+console.log(colorChoice);
+function getColorChoice(){
+    let colorSelection = document.querySelector('#colors').value;
+    console.log(colorSelection);
+    return colorSelection;
 }
 
-// Requête GET API
-fetch('http://localhost:3000/api/products')
-.then(function(response){
-    return response.json();
-})
-.then(function(jsonListProduct){
-    for(let jsonProduct of jsonListProduct){
-        let product = new PRODUCT(jsonProduct);
-        document.querySelector('#items').innerHTML += 
-        `<a href="./product.html?id=42">
-            <article>
-                <img src="${product.imageUrl}" alt="Lorem ipsum dolor sit amet, Kanap name1">
-                <h3 class="productName">${product.name}</h3>
-                <p class="productDescription">${product.description}</p>
-            </article>
-         </a>`;
-    }
-})
-.catch(function(error){
-    console.log(`Erreur requête de l'api : ${error}`);
-})
+// Enregistrer dans le local storage les entrées users sous forme d'objet 
+// Sur le bouton je crée:
+// un EventListener avec un preventDefault()
+// Paste les valeurs des inputs dans mon objet userCart
+// Sauvegarde dans le local storage
+/*
+let userCart= {
+    id : productID,
+    color : 'red',
+    quantity : 2,
+}
+*/
