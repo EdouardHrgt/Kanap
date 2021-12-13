@@ -24,29 +24,32 @@ fetch(`http://localhost:3000/api/products/${productID}`)
     console.log(`ERREUR Page 2 : ${error}`);
 })
 
-// Récupérer un produit dans le Local Storage
-function getFromBasket(){
-   JSON.parse(localStorage.getItem("BASKET"));
- }
-// Sauvegarder un produit dans le Local Storage
-function saveToBasket(basket) {
+// Enregistrement du panier dans le local storage
+function saveToBasket(basket){
     localStorage.setItem("BASKET", JSON.stringify(basket));
 }
-// Ajout d'un produit au panier (array)
+
+// Addition des articles identiques dans le local storage
+function sameProductAdded(product){
+ // si id pareille et couleur pareille on additionne la quantité
+}
+
+// Ajout d'un article au panier
 function addToBasket(product){
     const productAdded = localStorage.getItem("BASKET");
-    let basketArray = product;
+
     if(productAdded){
-        basketArray.JSON.parse(productAdded);
+        basketArray = JSON.parse(productAdded);
         basketArray.push(product);
-        localStorage.setItem('BASKET', JSON.stringify(basketArray));
+        saveToBasket(basketArray);
     }else{
         basketArray = [];
         basketArray.push(product);
-        localStorage.setItem('BASKET', JSON.stringify(basketArray));
+        saveToBasket(basketArray);
     }
 }
-// Création d'un objet produit
+
+// Création d'un article dans le local storage
 function getProduct() {
     const quantity = document.querySelector('#quantity');
     const color = document.querySelector('#colors');
@@ -60,26 +63,12 @@ function getProduct() {
             productID : `${productID}`,
             price : document.querySelector("#price").textContent
         };
-        console.log(article);
         addToBasket(article);
     }
 }
 
-
 //Event Listener sur le bouton 
 const btn = document.querySelector('#addToCart');
 btn.addEventListener('click', getProduct);
-
-
-/*
-- Aller lire le storage
-- Si il est vide je crée la clé
-- S'il est pas vide j'ajoute à la clé existante un nouveau produit en index d'array
-- 
-
-*/
-
-
-
 
 
