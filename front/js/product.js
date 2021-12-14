@@ -12,7 +12,6 @@ fetch(`http://localhost:3000/api/products/${articleID}`)
     document.querySelector('#title').textContent += dataList.name;
     document.querySelector('#price').textContent += dataList.price;
     document.querySelector('#description').textContent += dataList.description;
-
     dataList.colors.forEach(color =>{
         
         let newOption = document.createElement("option");
@@ -21,11 +20,7 @@ fetch(`http://localhost:3000/api/products/${articleID}`)
 
         let parentNode = document.querySelector("#colors");
         parentNode.appendChild(newOption);
-    }) 
-})
-.catch(error =>{
-    console.log(`ERREUR Page 2 : ${error}`);
-})
+    })
 
 // Enregistrement du panier dans le local storage
 function saveToBasket(basketArray){
@@ -61,6 +56,7 @@ function addToBasket(article){
         const sameArticleIndex = checkSameArticle(article);
         if (sameArticleIndex >= 0) {
             basketArray[sameArticleIndex].quantity = String(parseFloat(basketArray[sameArticleIndex].quantity) + parseFloat(article.quantity));
+            basketArray[sameArticleIndex].price = String(parseFloat(basketArray[sameArticleIndex].price) + parseFloat(article.price));
         } else {
             basketArray.push(article);
         }
@@ -79,18 +75,22 @@ function getArticle() {
     } else {
         let article = {
             id : `${articleID}`,
-            name : document.querySelector('#title').textContent,
+            name : `${dataList.name}`,
             color : `${color.value}`,
-            quantity : `${quantity.value}`    
+            quantity : `${quantity.value}`,
+            price : String(`${quantity.value}` * `${dataList.price}`),
+            unityPrice : `${dataList.price}`,
+            image : `${dataList.imageUrl}`,
+            altTxt : `${dataList.altTxt}`  
         };
         addToBasket(article);
-        alert('Article ajouté au panier');
     }
 }
 
 //Event Listener sur le bouton 
 const btn = document.querySelector('#addToCart');
-btn.addEventListener('click', getArticle);
-
-
-
+btn.addEventListener('click', getArticle); 
+})
+.catch(error =>{
+    console.log(`ERREUR Page 2 : ${error}`);
+})
