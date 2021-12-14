@@ -1,5 +1,5 @@
 //classe produits
-class PRODUCT {
+class ARTICLE {
     constructor(colors, _id, name, price, imageUrl, description, altTxt) {
         this.colors = colors;
         this._id = _id;
@@ -18,20 +18,21 @@ fetch('http://localhost:3000/api/products')
 })
 .then(function(jsonListProduct){
     for(let jsonProduct of jsonListProduct){
-        let product = new PRODUCT(jsonProduct.colors, jsonProduct._id, jsonProduct.name, jsonProduct.price, jsonProduct.imageUrl,  jsonProduct.description, jsonProduct.altTxt);
-        console.log(product);
+        let article = new ARTICLE(jsonProduct.colors, jsonProduct._id, jsonProduct.name,
+        jsonProduct.price, jsonProduct.imageUrl,  jsonProduct.description, jsonProduct.altTxt);
+
         document.querySelector('#items').innerHTML += 
         `<a href="./product.html?id=42">
             <article>
-                <img src="${product.imageUrl}" alt="Lorem ipsum dolor sit amet, Kanap name1">
-                <h3 class="productName">${product.name}</h3>
-                <p class="productDescription">${product.description}</p>
+                <img src="${article.imageUrl}" alt="Lorem ipsum dolor sit amet, Kanap name1">
+                <h3 class="productName">${article.name}</h3>
+                <p class="productDescription">${article.description}</p>
             </article>
          </a>`;  
     }
 })
 .catch(function(error){
-    console.log(`Erreur requête de l'api : ${error}`);
+    console.log(`Erreur Page 1: ${error}`);
 })
 
 
