@@ -1,4 +1,4 @@
-//Récupération du Local Storage
+//Récupération du panier depuis le Local Storage
 const basket = JSON.parse(localStorage.getItem("BASKET"));
 
 // Ajouts de tous les articles à la page HTML
@@ -27,16 +27,36 @@ basket.forEach(article =>{
      </article>`;
 })
 
-// Enregistrement du panier dans le local storage *************************** DOUBLON 
-function saveToBasket(basketArray){
-    localStorage.setItem("BASKET", JSON.stringify(basketArray));
+function sum(){
+    basket.forEach(article =>{
+        let totalSum = parseFloat(article.totalPrice + article.totalPrice);
+        console.log(totalSum);
+    })
 }
+sum();
+// Affiche du prix total du panier
+let totalPrice = document.querySelector('#totalPrice');
+// console.log(totalPrice.innerHTML);
 
-// récupération du local storage ************************** DOUBLON 
-function getFromBasket(){
-    return localStorage.getItem("BASKET");
-}
-// Event listener du click pour suppression des articles
+
+// changement de quantité d'un article
+const selectQuantity = document.querySelectorAll('.itemQuantity');
+
+selectQuantity.forEach(function(quantity, i){
+    quantity.addEventListener("change", () =>{
+        if(quantity.value <= 0){
+            //Je supprime l'article
+            console.log(`Article : ${basket[i].name} supprimé du panier`);
+        } else {
+            let newArticlePrice = quantity.value * basket[i].price;
+            document.querySelector('#article__price').textContent = newArticlePrice + ' €';
+            console.log(`prix changé pour ${basket[i].name}`);
+        }
+
+    })
+})
+
+// Suppression d'un article
 const deleteBtn = document.querySelectorAll('.deleteItem');
 
 deleteBtn.forEach(function(btn, i){
@@ -46,19 +66,21 @@ btn.addEventListener("click", () => {
     console.log(basket);
     saveToBasket(basket);
     })
+    /* Besoin de :
+    - Supprimer un objet ciblé de l'array panier
+    - sauvegarder le nouveau panier (avec x objets en moins) dans le local storage
+    - Mettre à jour la page pour afficher le HTML sans les anciens articles (pas besoin si local storage update ? *********)
+    */
 })
 
+// Enregistrement du panier dans le local storage
+function saveToBasket(basketArray){
+    localStorage.setItem("BASKET", JSON.stringify(basketArray));
+}
 
-// event listener sur le changement de quantité
-const selectQuantity = document.querySelectorAll('.itemQuantity');
+// récupération du local storage
+function getFromBasket(){
+    return localStorage.getItem("BASKET");
+}
 
-selectQuantity.forEach(quantity => {
-
-    quantity.addEventListener("change", () => {
-
-        let newArticlePrice = quantity.value * article.price;
-        document.querySelector('#article__price').textContent = newArticlePrice;
-        console.log(`prix changé pour ${article.name}`);
-    })
-})
 
