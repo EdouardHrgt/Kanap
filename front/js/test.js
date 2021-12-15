@@ -1,94 +1,28 @@
-// const color = document.querySelector('#colors');
-// color.insertAdjacentHTML("afterend", "msg test");
 
-// Récupération et création de l'objet ID produit
-const usp = new URLSearchParams(window.location.search);
-const articleID = usp.get("id");
+//=================================================
+//               ____ Formulaire  ____
+//=================================================
 
-// Requête API sur ID produit + Ajouts des infos sur la page HTML
-fetch(`http://localhost:3000/api/products/${articleID}`)
-.then(res =>{
-    return res.json();
-})
-.then(dataList =>{
-    document.querySelector('.item__img').innerHTML += `<img src="${dataList.imageUrl}" alt="${dataList.altTxt}">`;
-    document.querySelector('#title').textContent += dataList.name;
-    document.querySelector('#price').textContent += dataList.price;
-    document.querySelector('#description').textContent += dataList.description;
+const form = document.querySelector('.cart__order__form');
 
-    dataList.colors.forEach(color =>{
-        
-        let newOption = document.createElement("option");
-        newOption.innerHTML = `${color}`;
-        newOption.value = `${color}`;
+// Fonctions de vérification des champs via RegExp par input
 
-        let parentNode = document.querySelector("#colors");
-        parentNode.appendChild(newOption);
-    }) 
-})
-.catch(error =>{
-    console.log(`ERREUR Page 2 : ${error}`);
-})
-
-// Enregistrement du panier dans le local storage
-function saveToBasket(basketArray){
-    localStorage.setItem("BASKET", JSON.stringify(basketArray));
-}
-
-// récupération du local storage
-function getFromBasket(){
-    return localStorage.getItem("BASKET");
-}
-
-// vérification s'il y a un doublon dans le local storage
-function checkSameArticle(article){
-    const basketArray = JSON.parse(getFromBasket());
-
-    let findSameIndex = basketArray.findIndex(object => 
-        object.id == article.id && object.color == article.color
-        );
-
-    return findSameIndex;
-}
-
-// Ajout d'un article au panier du Local Storage
-function addToBasket(article){
-    const basket = getFromBasket();
-
-    if (!basket) {
-        let basketArray = [];
-        basketArray.push(article);
-        saveToBasket(basketArray);
+function validEmail(inputEmail){
+    let emailRegExp = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
+    let testEmail = emailRegExp.test(inputEmail.value);
+    let errMsg = document.querySelector('#emailErrorMsg');
+    if(testEmail) {
+        errMsg.textContent = "ok c'est bon";
     } else {
-        basketArray = JSON.parse(basket);
-        const sameArticleIndex = checkSameArticle(article);
-        if (sameArticleIndex >= 0) {
-            basketArray[sameArticleIndex].quantity = String(parseFloat(basketArray[sameArticleIndex].quantity) + parseFloat(article.quantity));
-        } else {
-            basketArray.push(article);
-        }
-        saveToBasket(basketArray);
+        errMsg.textContent = " alerte c'est pas bon ";
     }
 }
 
-// Création d'un article + envoi au locastorage
-function getArticle() {
-    const quantity = document.querySelector('#quantity');
-    const color = document.querySelector('#colors');
 
-    if (color.value == "") {
-        color.setCustomValidity("Veuillez selectionner une couleur");
-        alert('Merci de selectionner une couleur');
-    } else {
-        let article = {
-            id : `${articleID}`,
-            color : `${color.value}`,
-            quantity : `${quantity.value}`    
-        };
-        addToBasket(article);
-    }
-}
+// Event listeners sur changement des inputs 
+let email = document.querySelector('#email');
 
-//Event Listener sur le bouton 
-const btn = document.querySelector('#addToCart');
-btn.addEventListener('click', getArticle);
+// email.addEventListener("change", validEmail(form.email));
+email.addEventListener('change', function(){
+    console.log(email.value);
+})

@@ -1,6 +1,6 @@
 //Récupération du Local Storage
 const basket = JSON.parse(localStorage.getItem("BASKET"));
-console.log(basket);
+
 // Ajouts de tous les articles à la page HTML
 basket.forEach(article =>{
     document.querySelector('#cart__items').innerHTML +=
@@ -12,7 +12,7 @@ basket.forEach(article =>{
             <div class="cart__item__content__description">
                 <h2>${article.name}</h2>
                 <p>${article.color}</p>
-                <p>${article.price} €</p>
+                <p id="article__price">${article.totalPrice} €</p>
             </div>
         <div class="cart__item__content__settings">
             <div class="cart__item__content__settings__quantity">
@@ -27,28 +27,38 @@ basket.forEach(article =>{
      </article>`;
 })
 
-// Calculer le prix de chaque article en fonction de la quantité 
-function articlePrice(article){
-    return quantity.value * article.unityPrice;
+// Enregistrement du panier dans le local storage *************************** DOUBLON 
+function saveToBasket(basketArray){
+    localStorage.setItem("BASKET", JSON.stringify(basketArray));
 }
-// Calculer le montant total du panier
 
+// récupération du local storage ************************** DOUBLON 
+function getFromBasket(){
+    return localStorage.getItem("BASKET");
+}
 // Event listener du click pour suppression des articles
 const deleteBtn = document.querySelectorAll('.deleteItem');
-deleteBtn.forEach(btn =>{
-    btn.addEventListener("click", () => {
-        console.log('je supprime un article');
+
+deleteBtn.forEach(function(btn, i){
+btn.addEventListener("click", () => {
+    console.log(`Article : ${basket[i].name} supprimé !`);
+    delete basket[i];
+    console.log(basket);
+    saveToBasket(basket);
     })
 })
+
 
 // event listener sur le changement de quantité
 const selectQuantity = document.querySelectorAll('.itemQuantity');
+
 selectQuantity.forEach(quantity => {
+
     quantity.addEventListener("change", () => {
-        console.log(`Je change la quantité à : ${quantity.value}`);
+
+        let newArticlePrice = quantity.value * article.price;
+        document.querySelector('#article__price').textContent = newArticlePrice;
+        console.log(`prix changé pour ${article.name}`);
     })
 })
 
-//=================================================
-//               ____ Formulaire  ____
-//=================================================

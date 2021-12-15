@@ -56,7 +56,7 @@ function addToBasket(article){
         const sameArticleIndex = checkSameArticle(article);
         if (sameArticleIndex >= 0) {
             basketArray[sameArticleIndex].quantity = String(parseFloat(basketArray[sameArticleIndex].quantity) + parseFloat(article.quantity));
-            basketArray[sameArticleIndex].price = String(parseFloat(basketArray[sameArticleIndex].price) + parseFloat(article.price));
+            basketArray[sameArticleIndex].totalPrice = String(parseFloat(basketArray[sameArticleIndex].totalPrice) + parseFloat(article.price));
         } else {
             basketArray.push(article);
         }
@@ -70,7 +70,6 @@ function getArticle() {
     const color = document.querySelector('#colors');
 
     if (color.value == "") {
-        color.setCustomValidity("Veuillez selectionner une couleur");
         alert('Merci de selectionner une couleur');
     } else {
         let article = {
@@ -78,8 +77,8 @@ function getArticle() {
             name : `${dataList.name}`,
             color : `${color.value}`,
             quantity : `${quantity.value}`,
-            price : String(`${quantity.value}` * `${dataList.price}`),
-            unityPrice : `${dataList.price}`,
+            totalPrice : String(`${quantity.value}` * `${dataList.price}`),
+            price : `${dataList.price}`,
             image : `${dataList.imageUrl}`,
             altTxt : `${dataList.altTxt}`  
         };
