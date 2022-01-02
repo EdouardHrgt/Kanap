@@ -21,4 +21,3 @@ fetch('http://localhost:3000/api/products')
 .catch(error =>{
   console.log(`ERREUR Page 1 : ${error}`);
 })
-

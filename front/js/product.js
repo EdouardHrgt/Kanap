@@ -69,8 +69,8 @@ function getArticle() {
     const quantity = document.querySelector('#quantity');
     const color = document.querySelector('#colors');
 
-    if (color.value == "") {
-        alert('Merci de selectionner une couleur');
+    if (color.value == "" || quantity.value <= 0 || quantity.value > 100) {
+        alert('Veuillez choisir une couleur et une quantité comprise entre 1 et 100');
     } else {
         let article = {
             id : `${articleID}`,

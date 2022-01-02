@@ -22,32 +22,37 @@ function deleteArticle(i){
 }
 
 // Insertion du contenu HTML
-basket.forEach(article =>{
-    document.querySelector('#cart__items').innerHTML +=
-    `<article class="cart__item" data-id="${article.id}" data-color="${article.color}">
-        <div class="cart__item__img">
-            <img src="${article.image}" alt="${article.altTxt}">
-        </div>
-        <div class="cart__item__content">
-            <div class="cart__item__content__description">
-                <h2>${article.name}</h2>
-                <p>${article.color}</p>
-                <p id="article__price">${article.totalPrice} €</p>
+if(basket == null){
+    console.log("panier vide; il n\'y a rien a afficher");
+} else {
+    basket.forEach(article =>{
+        document.querySelector('#cart__items').innerHTML +=
+        `<article class="cart__item" data-id="${article.id}" data-color="${article.color}">
+            <div class="cart__item__img">
+                <img src="${article.image}" alt="${article.altTxt}">
             </div>
-        <div class="cart__item__content__settings">
-            <div class="cart__item__content__settings__quantity">
-                <p>Qté : ${article.quantity}</p>
-                <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${article.quantity}">
+            <div class="cart__item__content">
+                <div class="cart__item__content__description">
+                    <h2>${article.name}</h2>
+                    <p>${article.color}</p>
+                    <p id="article__price">${article.totalPrice} €</p>
+                </div>
+            <div class="cart__item__content__settings">
+                <div class="cart__item__content__settings__quantity">
+                    <p>Qté : ${article.quantity}</p>
+                    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${article.quantity}">
+                </div>
+                <div class="cart__item__content__settings__delete">
+                    <p class="deleteItem">Supprimer</p>
+                </div>
             </div>
-            <div class="cart__item__content__settings__delete">
-                <p class="deleteItem">Supprimer</p>
             </div>
-        </div>
-        </div>
-     </article>`;
+         </article>`;
+    
+         displayTotals(article);
+    })
+}
 
-     displayTotals(article);
-})
 
 // changement de quantité d'un article
 const selectQuantity = document.querySelectorAll('.itemQuantity');
@@ -91,150 +96,103 @@ deleteBtn.forEach(function(btn, i){
     })
 })
 
-//.========================================================.
-//                 .----- Formulaire -----.
-//.========================================================.
+// Contrôle du formulaire via Regex
 const form = document.querySelector('.cart__order__form');
-const regexArray = [/^[a-zA-Z\u00C0-\u00FF]*$/, /^[a-zA-Z0-9\s,'-]*$/, /^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$/];
+const regexArray = [/^[a-zA-Z\u00C0-\u00FF]*$/, /^[a-zA-Z0-9\u00C0-\u00FF\s,'-]*$/, 
+/^([a-zA-Z\u0080-\u024F]+(?:. |-| |'))*[a-zA-Z\u0080-\u024F]*$/, 
+/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g];
 
-// Prénom
-form.firstName.addEventListener('change', regex1);
-function regex1(){
-    const regex = regexArray[0];
-    const testValue = regex.test(this.value);
-    const errorMsg = document.querySelector('#firstNameErrorMsg');
-
-    if(testValue && this.value != "") {
-       errorMsg.textContent = "";
-       const userValue = this.value;
-       return true;
+function validForm(elmt, i, domElmt, msg){
+    
+    const testValue = regexArray[i].test(elmt.value);
+    regexArray[i].test("²");
+    const errorMsg = document.querySelector(domElmt);
+    if(testValue && elmt.value != "") {
+        errorMsg.textContent = "";
+        return true;
     } else {
-        errorMsg.textContent = "Les caractères spéciaux et les chiffres ne sont pas valides";
-        tmp1 = true;
+        errorMsg.textContent = msg;
         return false;
-    }
+        }
 }
 
-// Nom
-form.lastName.addEventListener('change', regex2);
-function regex2(){
-    const regex = regexArray[0];
-    const testValue = regex.test(this.value);
-    const errorMsg = document.querySelector('#lastNameErrorMsg');
+// Vérification des champs du formulaire
+form.firstName.addEventListener('change', () => {
+    validForm(form.firstName, 0, "#firstNameErrorMsg" ,"Veuillez renseigner votre Prénom");
+})
 
-    if(testValue && this.value != "") {
-       errorMsg.textContent = "";
-       const userValue = this.value;
-       return true;
-    } else {
-        errorMsg.textContent = "Les caractères spéciaux et les chiffres ne sont pas valides";
-        return false;
-    }
-}
+form.lastName.addEventListener('change', () => {
+    validForm(form.lastName, 0, "#lastNameErrorMsg" ,"Veuillez renseigner votre Nom");
+})
 
-// Adresse 
-form.address.addEventListener('change', regex3);
-function regex3(){
-    const regex = regexArray[1];
-    const testValue = regex.test(this.value);
-    const errorMsg = document.querySelector('#addressErrorMsg');
+form.address.addEventListener('change', () => {
+    validForm(form.address, 1, "#addressErrorMsg" ,"Veuillez renseigner votre Adresse");
+})
 
-    if(testValue && this.value != "") {
-       errorMsg.textContent = "";
-       const userValue = this.value;
-       return true;
-    } else {
-        errorMsg.textContent = "Merci d'utiliser une adresse valide";
-        return false;
-    }
-}
+form.city.addEventListener('change', () => {
+    validForm(form.city, 2, "#cityErrorMsg" ,"Veuillez renseigner votre Ville");
+})
 
-// Ville 
-form.city.addEventListener('change', regex4);
-function regex4(){
-    const regex = regexArray[2];
-    const testValue = regex.test(this.value);
-    const errorMsg = document.querySelector('#cityErrorMsg');
-
-    if(testValue && this.value != "") {
-       errorMsg.textContent = "";
-       const userValue = this.value;
-       return true;
-    } else {
-        errorMsg.textContent = "Veuillez renseigner votre ville";
-        return false;
-    }
-}
-
-// Email
-form.email.addEventListener('change', regex5);
-function regex5(){
-    const regex = new RegExp('^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$', 'g');
-    const testValue = regex.test(this.value);
-    const errorMsg = document.querySelector('#emailErrorMsg');
-
-    if(testValue && this.value != "") {
-       errorMsg.textContent = "";
-       const userValue = this.value;
-       return true;
-    } else {
-        errorMsg.textContent = "Merci d'utiliser un Email valide";
-        return false;
-    }
-}
+form.email.addEventListener('change', () => {
+    validForm(form.email, 3, "#emailErrorMsg" ,"Veuillez renseigner un Email valide");
+})
 
 // Bouton SUBMIT
 const submitBtn = document.querySelector('#order');
 
-//if(regex1() && regex2() && regex3() && regex4() && regex5()){
 submitBtn.addEventListener("click", e => {
+    const testValid = validForm(form.firstName, 0, "#firstNameErrorMsg" ,"Veuillez renseigner votre Prénom") && 
+    validForm(form.lastName, 0, "#lastNameErrorMsg" ,"Veuillez renseigner votre Nom") &&
+    validForm(form.address, 1, "#addressErrorMsg" ,"Veuillez renseigner votre Adresse") &&
+    validForm(form.city, 2, "#cityErrorMsg" ,"Veuillez renseigner votre Ville") &&
+    validForm(form.email, 3, "#emailErrorMsg" ,"Veuillez renseigner un Email valide");
     e.preventDefault();
-    if(basket.length == 0) {
-        console.log("Le panier est vide !");
-
-    } else {
-        
-        const products = [];
-        basket.forEach(article => {
-            products.push(article.id);
-        });
-        const contact = {
-            firstName : form.firstName.value,
-            lastName : form.lastName.value,
-            address : form.address.value,
-            city : form.city.value,
-            email : form.email.value
+    
+    if(testValid){   
+        if(basket == null) {
+            console.log("Le panier est null !");
+        }else if(basket.length == 0) {
+            console.log("Le panier est vide !");
+        } else {  
+            const products = [];
+            basket.forEach(article => {
+                products.push(article.id);
+            });
+            const contact = {
+                firstName : form.firstName.value,
+                lastName : form.lastName.value,
+                address : form.address.value,
+                city : form.city.value,
+                email : form.email.value
+            }
+            const order = {
+                products,
+                contact,
+            };
+    
+            // récupération de l'Id commande par l'API
+            const postOptions = {
+                method: 'POST',
+                body: JSON.stringify(order),
+                headers: {
+                    'Accept': 'application/json', 
+                    "Content-Type": "application/json" 
+                },
+            };
+                
+            fetch("http://localhost:3000/api/products/order", postOptions)
+            .then(res => {
+                return res.json();
+            })
+            .then(dataList =>{ 
+                localStorage.setItem("orderId", JSON.stringify(dataList.orderId));
+                document.location.href = `confirmation.html?id=${dataList.orderId}`;
+            })
+            .catch(error => {
+                console.log(`ERREUR requete POST : ${error}`);
+            })
         }
-        const order = {
-            products,
-            contact,
-        };
-
-        // récupération de l'Id commande par l'API
-        const postOptions = {
-            method: 'POST',
-            body: JSON.stringify(order),
-            headers: {
-                'Accept': 'application/json', 
-                "Content-Type": "application/json" 
-            },
-        };
-        
-        fetch("http://localhost:3000/api/products/order", postOptions)
-        .then(res => {
-            return res.json();
-        })
-        .then(dataList =>{ 
-            console.log(dataList.orderId);
-            localStorage.setItem("orderId", JSON.stringify(dataList.orderId));
-            document.location.href = "confirmation.html";
-        })
-        .catch(error => {
-            console.log(`ERREUR requete POST : ${error}`);
-        })
+    } else {
+        console.log('formulaire incomplet !');
     }
 });
-/*
-} else {
-    console.log("le formulaire est vide !");
-}*/

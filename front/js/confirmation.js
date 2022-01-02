@@ -1,18 +1,23 @@
-// Affichage de la commande sur la page HTML
+// Affichage du numéro de commande sur la page
 function displayOrderId(){
+
 const orderId = JSON.parse(localStorage.getItem("orderId"));
-const idHtmlDisplay = document.querySelector('#orderId');
+const displayId = document.querySelector('#orderId');
+const errMsg = document.querySelector('.confirmation p');
+
 if(orderId){
-    idHtmlDisplay.textContent = String(orderId);
+    displayId.textContent = String(orderId);
 } else {
-    idHtmlDisplay.textContent = "Commande vide :-( ";
+    errMsg.textContent = "Vous n'avez pas passé commande !";
+    setTimeout(console.log("Y s'passe un truc au bout de 5s"), 5000);
     }
+    //document.location.href = "index.html"
 };
+
 displayOrderId();
 
 // Suppression du Local Storage
 function clearStorage(){
-    //Supprimer chaque élément un par un et pas via "localStorage.clear()"
     localStorage.removeItem("orderId");
     localStorage.removeItem("BASKET");
 };
