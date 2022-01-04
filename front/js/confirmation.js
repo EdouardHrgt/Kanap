@@ -4,15 +4,10 @@ function displayOrderId() {
   const displayId = document.querySelector("#orderId");
   const errMsg = document.querySelector(".confirmation p");
 
-  function goToLobby(timer) {
-    window.setTimeout((document.location.href = "index.html"), timer);
-  }
-
   if (orderId) {
     displayId.textContent = String(orderId);
   } else {
-    errMsg.textContent = "Vous n'avez pas passé commande !";
-    goToLobby(5000);
+    errMsg.textContent = "Vous n'avez pas encore passé commande !";
   }
 }
 
