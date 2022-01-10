@@ -114,7 +114,7 @@ function validForm(elmt, i, domElmt, msg) {
   const testValue = regexArray[i].test(elmt.value);
   regexArray[i].test("²");
   const errorMsg = document.querySelector(domElmt);
-  
+
   if (testValue && elmt.value != "") {
     errorMsg.textContent = "";
     return true;
@@ -203,7 +203,6 @@ submitBtn.addEventListener("click", (e) => {
   e.preventDefault();
 
   if (testValid) {
-    
     if (basket == null) {
       console.log("Le panier est null !");
     } else if (basket.length == 0) {

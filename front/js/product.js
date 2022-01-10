@@ -14,6 +14,7 @@ fetch(`http://localhost:3000/api/products/${articleID}`)
     document.querySelector("#title").textContent += dataList.name;
     document.querySelector("#price").textContent += dataList.price;
     document.querySelector("#description").textContent += dataList.description;
+
     dataList.colors.forEach((color) => {
       let newOption = document.createElement("option");
       newOption.innerHTML = `${color}`;
@@ -55,6 +56,7 @@ fetch(`http://localhost:3000/api/products/${articleID}`)
       } else {
         basketArray = JSON.parse(basket);
         const sameArticleIndex = checkSameArticle(article);
+
         if (sameArticleIndex >= 0) {
           basketArray[sameArticleIndex].quantity = String(
             parseFloat(basketArray[sameArticleIndex].quantity) +
